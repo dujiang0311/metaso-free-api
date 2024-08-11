@@ -503,7 +503,7 @@ async function receiveStream(model: string, convId: string, stream: any) {
       choices: [
         {
           index: 0,
-          message: { role: "assistant", content: "" },
+          message: { role: "assistant", content: "", linkUrl: "" },
           finish_reason: "stop",
         },
       ],
@@ -523,6 +523,8 @@ async function receiveStream(model: string, convId: string, stream: any) {
         }
         if (result.type == "append-text")
           data.choices[0].message.content += removeIndexLabel(result.text);
+        else if (result.type == "set-reference")
+          data.choices[0].message.linkUrl = result.list;
         else if (result.type == "error")
           data.choices[0].message.content += `[${result.code}]${result.msg}`;
       } catch (err) {
